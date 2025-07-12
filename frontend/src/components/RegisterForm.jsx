@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { registerUser } from "../apis/user.api.js";
 import { useNavigate } from '@tanstack/react-router';
+import { useDispatch } from 'react-redux';
+import { login } from '../store/slice/authSlice';
 
 
 const RegisterForm = ({ state }) => {
@@ -9,6 +11,7 @@ const RegisterForm = ({ state }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
 
@@ -25,6 +28,7 @@ const RegisterForm = ({ state }) => {
     try {
       const data = await registerUser(name, email, password);
       setLoading(false);
+      dispatch(login(data.user))
       navigate({ to: "/dashboard" })
       console.log("Registration successful", data);
     } catch (err) {
